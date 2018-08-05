@@ -8,13 +8,13 @@ defmodule Unicorn.Users.GameData do
 
   @primary_key false
   embedded_schema do
-    field(:code, :float, default: 0)
-    field(:code_rate, :float, default: 0)
-    field(:bugs, :float, default: 0)
-    field(:bug_rate, :float, default: 0)
-    field(:money, :float, default: 0)
-    field(:revenue_rate, :float, default: 0)
-    field(:expense_rate, :float, default: 0)
+    field(:code, :integer, default: 0)
+    field(:code_rate, :integer, default: 0)
+    field(:bugs, :integer, default: 0)
+    field(:bug_rate, :integer, default: 0)
+    field(:money, :integer, default: 0)
+    field(:revenue_rate, :integer, default: 0)
+    field(:expense_rate, :integer, default: 0)
     field(:capacity, :integer, default: 1)
     field(:employees, :map, default: %{})
     field(:upgrades, :map, default: %{})

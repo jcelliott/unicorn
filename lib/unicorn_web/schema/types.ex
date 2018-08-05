@@ -2,34 +2,27 @@ defmodule UnicornWeb.Schema.Types do
   use Absinthe.Schema.Notation
 
   object :user do
-    field :id, :id
-    field :username, :string
+    field :id, non_null(:id)
+    field :username, non_null(:string)
     field :game_data, :game_data
   end
 
   object :game_data do
-    field(:code, :float)
-    field(:code_rate, :float)
-    field(:bugs, :float)
-    field(:bug_rate, :float)
-    field(:money, :float)
-    field(:revenue_rate, :float)
-    field(:expense_rate, :float)
+    field(:code, :integer)
+    field(:code_rate, :integer)
+    field(:bugs, :integer)
+    field(:bug_rate, :integer)
+    field(:money, :integer)
+    field(:revenue_rate, :integer)
+    field(:expense_rate, :integer)
     field(:capacity, :integer)
     field(:employees, :employee_map)
     # field(:upgrades, :upgrade_map)
   end
 
   object :employee_map do
-    field(:dev_intern, :employee)
-    field(:hacker, :employee)
+    field(:dev_intern, :integer)
+    field(:hacker, :integer)
   end
 
-  object :employee do
-    field(:cost, :float)
-    field(:code_rate, :float)
-    field(:expense_rate, :float)
-    field(:revenue_rate, :float)
-    field(:bug_rate, :float)
-  end
 end

@@ -16,13 +16,13 @@ defmodule Unicorn.Users.Purchase do
   @purchases %{
     "employee" => %{
       "dev_intern" => %{
-        "code_rate" => 1.0,
-        "bug_rate" => 0.1,
+        "code_rate" => 10,
+        "bug_rate" => 100,
         "expense_rate" => 100
       },
       "hacker" => %{
-        "code_rate" => 5.0,
-        "bug_rate" => 0.05,
+        "code_rate" => 50,
+        "bug_rate" => 50,
         "expense_rate" => 500
       }
     }
@@ -51,7 +51,7 @@ defmodule Unicorn.Users.Purchase do
     end
   end
 
-  def execute(%GameData{} = data, %{"type" => type, "name" => name}) do
+  def execute(%GameData{} = data, %{type: type, name: name}) do
     with {:ok, item} <- get(type, name),
          :ok <- validate_cost(data, item) do
       data
@@ -69,24 +69,13 @@ defmodule Unicorn.Users.Purchase do
       expense_rate: data.expense_rate + item["expense_rate"],
     }
     |> Map.merge(process_item_type_data(data, type, name, item))
-    # data
-    # |> update_in([:code_rate], &(&1 + item.code_rate))
-    # |> update_in([:bug_rate], &(&1 + item.bug_rate))
-    # |> update_in([:revenue_rate], &(&1 + item.revenue_rate))
-    # |> update_in([:expense_rate], &(&1 + item.expense_rate))
-    # |> process_item_type_data(type, name, item)
   end
 
-  def process_item_type_data(data, "employee", name, item) do
-    # data
-    # |> update_in([:employees, name], fn
-    #   nil -> Map.merge(item, %{name: name, count: 1})
-    #   employee -> %{employee | count: employee.count + 1}
-    # end)
-    employee = case data.employees[name] do
-      nil -> Map.merge(Map.from_struct(item), %{"name" => name, "count" => 1})
-      employee -> %{employee | "count" => employee["count"] + 1}
-    end
-    %{employees: Map.put(data.employees, name, employee)}
+  def process_item_type_data(data, "employee", name, _item) do
+    %{employees: data.employees}
+    |> update_in([:employees, name], fn
+      nil -> 1
+      employee_count -> employee_count + 1
+    end)
   end
 end
