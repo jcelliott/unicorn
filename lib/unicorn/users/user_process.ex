@@ -1,17 +1,20 @@
 defmodule Unicorn.Users.UserProcess do
-  use GenServer
-
   @moduledoc """
   UserProcess keeps track of the user's current state.
   """
 
-  def start_link(user_id) do
+  use GenServer, restart: :transient
+  require Logger
+
+  @user_registry_name :user_registry
+
+  def start_link(user_id: user_id, data: data) do
     name = lookup_name(user_id)
-    GenServer.start_link(__MODULE__, [%{id: user_id}], name: name)
+    GenServer.start_link(__MODULE__, Map.merge(data, %{id: user_id}), name: name)
   end
 
   defp lookup_name(user_id) do
-    {:via, Registry, {:user_registry, user_id}}
+    {:via, Registry, {@user_registry_name, user_id}}
   end
 
   def update_game_data(user_id, data) do
@@ -24,6 +27,7 @@ defmodule Unicorn.Users.UserProcess do
 
   @impl true
   def init(state) do
+    Logger.debug("started user process: #{state.id}")
     {:ok, state}
   end
 

@@ -1,4 +1,5 @@
 defmodule Unicorn.Application do
+  @moduledoc false
   use Application
 
   # See https://hexdocs.pm/elixir/Application.html
@@ -14,7 +15,8 @@ defmodule Unicorn.Application do
       supervisor(UnicornWeb.Endpoint, []),
       # Start your own worker by calling: Unicorn.Worker.start_link(arg1, arg2, arg3)
       # worker(Unicorn.Worker, [arg1, arg2, arg3]),
-      supervisor(Registry, [:unique, :user_registry])
+      supervisor(Registry, [:unique, :user_registry]),
+      supervisor(Unicorn.Users.UserProcessSupervisor, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

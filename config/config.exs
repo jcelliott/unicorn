@@ -14,8 +14,7 @@ config :unicorn, UnicornWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "DlD3VNU5R6xNVoJxCewh+aHr3c+PfLRkHTh7cqV+TzUllNxcxUWjIhK7xL3tCrcl",
   render_errors: [view: UnicornWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Unicorn.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Unicorn.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -24,4 +23,4 @@ config :logger, :console,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

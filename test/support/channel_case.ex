@@ -25,13 +25,13 @@ defmodule UnicornWeb.ChannelCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Unicorn.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Unicorn.Repo, {:shared, self()})
     end
+
     :ok
   end
-
 end
