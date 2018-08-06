@@ -2,8 +2,8 @@ defmodule UnicornWeb.Schema do
   use Absinthe.Schema
   alias Unicorn.Users
 
-  import_types UnicornWeb.Schema.Types
-  import_types UnicornWeb.Schema.Mutations
+  import_types(UnicornWeb.Schema.Types)
+  import_types(UnicornWeb.Schema.Mutations)
 
   query do
     @desc "Get the current user"
@@ -21,8 +21,9 @@ defmodule UnicornWeb.Schema do
 
     @desc "List all users"
     field :users, non_null(list_of(:user)) do
-      arg :sort_by, :string
-      arg :limit, :integer
+      arg(:sort_by, :string)
+      arg(:limit, :integer)
+
       resolve(fn args, _ ->
         {:ok, Users.list_users(args)}
       end)
@@ -50,8 +51,4 @@ defmodule UnicornWeb.Schema do
 
   # if it's any other object keep things as is
   def middleware(middleware, _field, _object), do: middleware
-
-  def get_string_key(%{source: source} = res, key) do
-    %{res | state: :resolved, value: Map.get(source, key)}
-  end
 end

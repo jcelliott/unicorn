@@ -28,6 +28,3 @@ npm-debug.log
 
 # iex config
 .iex.exs
-
-# ignore web stuff for now
-assets

@@ -37,5 +37,4 @@ defmodule Unicorn.Users.User do
     user
     |> cast(attrs, @valid_update_fields)
   end
-
 end

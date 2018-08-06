@@ -83,7 +83,7 @@ defmodule Unicorn.Users.Purchase do
       code_rate: user.code_rate + item["code_rate"],
       bug_rate: user.bug_rate + item["bug_rate"],
       revenue_rate: user.revenue_rate + item["revenue_rate"],
-      expense_rate: user.expense_rate + item["expense_rate"],
+      expense_rate: user.expense_rate + item["expense_rate"]
     }
     |> Map.merge(process_item_type_data(user, type, name, item))
   end

@@ -19,15 +19,22 @@ defmodule Unicorn.Users do
   end
 
   def list_users(args) do
-    sort_by = case args[:sort_by] do
-      nil -> :money
-      key when is_atom(key) -> key
-      key when is_binary(key) -> String.to_existing_atom(Macro.underscore(key))
-    end
+    sort_by =
+      case args[:sort_by] do
+        nil -> :money
+        key when is_atom(key) -> key
+        key when is_binary(key) -> String.to_existing_atom(Macro.underscore(key))
+      end
+
     limit = args[:limit] || 10
-    query = from User,
-      order_by: [desc: ^sort_by],
-      limit: ^limit
+
+    query =
+      from(
+        User,
+        order_by: [desc: ^sort_by],
+        limit: ^limit
+      )
+
     Repo.all(query)
   end
 
@@ -53,7 +60,8 @@ defmodule Unicorn.Users do
   Creates a user.
   """
   def create_user(attrs \\ %{}) do
-    attrs = Map.put_new(attrs, :money, 100000)
+    attrs = Map.put_new(attrs, :money, 100_000)
+
     %User{}
     |> User.create_changeset(attrs)
     |> IO.inspect(label: "create user")
@@ -85,7 +93,8 @@ defmodule Unicorn.Users do
   Updates a user's game data
   """
   def update_game_data(%User{} = user, data) do
-    IO.puts("update: #{inspect data}")
+    IO.puts("update: #{inspect(data)}")
+
     with updates <- calculate_updates(user),
          changeset <- User.changeset(user, Map.merge(updates, data)),
          {:ok, user} <- Repo.update(changeset),
@@ -93,8 +102,9 @@ defmodule Unicorn.Users do
          {:ok, :updated} <- UserProcess.update_game_data(user.id, user) do
       {:ok, user}
     else
-      err -> IO.inspect(err)
-      # _ -> {:error, "unable to update user game data"}
+      err ->
+        IO.inspect(err)
+        # _ -> {:error, "unable to update user game data"}
     end
   end
 
@@ -118,10 +128,11 @@ defmodule Unicorn.Users do
 
   def calculate_updates(%User{} = user) do
     time_delta = NaiveDateTime.diff(NaiveDateTime.utc_now(), user.updated_at)
+
     %{
-      money: user.money + ((user.revenue_rate - user.expense_rate) * time_delta),
-      code: user.code + (user.code_rate * time_delta),
-      bugs: user.bugs + (user.bug_rate * time_delta)
+      money: user.money + (user.revenue_rate - user.expense_rate) * time_delta,
+      code: user.code + user.code_rate * time_delta,
+      bugs: user.bugs + user.bug_rate * time_delta
     }
   end
 end

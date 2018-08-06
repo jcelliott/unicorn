@@ -32,4 +32,3 @@ defmodule Unicorn.Users.GameData do
     |> cast(attrs, @valid_fields)
   end
 end
-

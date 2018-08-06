@@ -20,5 +20,4 @@ defmodule Unicorn.Users.Action do
       data -> {:ok, data}
     end
   end
-
 end
