@@ -20,7 +20,7 @@ defmodule UnicornWeb.Router do
   pipeline :api do
     plug(:accepts, ["json"])
     plug(UnicornWeb.Context)
-    plug(:debug_response)
+    # plug(:debug_response)
   end
 
   scope "/api" do
@@ -30,6 +30,7 @@ defmodule UnicornWeb.Router do
       "/graphiql",
       Absinthe.Plug.GraphiQL,
       schema: UnicornWeb.Schema,
+      socket: UnicornWeb.UserSocket,
       interface: :playground
     )
 

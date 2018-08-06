@@ -1,5 +1,6 @@
 defmodule UnicornWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :unicorn
+  use Absinthe.Phoenix.Endpoint
 
   socket("/socket", UnicornWeb.UserSocket)
 

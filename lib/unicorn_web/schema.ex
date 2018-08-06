@@ -16,7 +16,7 @@ defmodule UnicornWeb.Schema do
 
     @desc "List all available purchases"
     field :purchases, non_null(list_of(:purchase_item)) do
-      resolve(fn _, _ -> {:ok, Users.Purchase.available_purchases()} end)
+      resolve(fn _, _ -> {:ok, Users.Purchase.available_purchases() |> IO.inspect()} end)
     end
 
     @desc "List all users"
@@ -42,6 +42,14 @@ defmodule UnicornWeb.Schema do
 
   mutation do
     import_fields(:user_mutations)
+  end
+
+  subscription do
+    field(:leaderboard_updated, list_of(:user)) do
+      config(fn args, _ ->
+        {:ok, topic: "updated"}
+      end)
+    end
   end
 
   # if it's a field for the mutation object, add this middleware to the end

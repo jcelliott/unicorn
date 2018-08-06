@@ -1,6 +1,9 @@
 defmodule UnicornWeb.UserSocket do
   use Phoenix.Socket
 
+  use Absinthe.Phoenix.Socket,
+    schema: UnicornWeb.Schema
+
   ## Channels
   # channel "room:*", UnicornWeb.RoomChannel
 
@@ -19,7 +22,7 @@ defmodule UnicornWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
+  def connect(params, socket) do
     {:ok, socket}
   end
 

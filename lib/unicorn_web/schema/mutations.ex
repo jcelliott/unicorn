@@ -31,7 +31,14 @@ defmodule UnicornWeb.Schema.Mutations do
 
       resolve(fn %{purchase: purchase}, %{context: %{current_user: user}} ->
         Users.execute_action(user, {:purchase, purchase})
-        |> IO.inspect(label: "after purchase")
+        |> wrap_user_response()
+      end)
+    end
+
+    @desc "Release your product!"
+    field :release, type: :user_response do
+      resolve(fn _args, %{context: %{current_user: user}} ->
+        Users.execute_action(user, :release)
         |> wrap_user_response()
       end)
     end

@@ -19,8 +19,10 @@ defmodule UnicornWeb.Schema.Types do
 
   @desc "Map of employee names to counts"
   object :employee_map do
-    field(:dev_intern, :integer)
-    field(:hacker, :integer)
+    field(:dev_intern, :integer, resolve: string_key("dev_intern"))
+    field(:hacker, :integer, resolve: string_key("hacker"))
+    field(:ninja, :integer, resolve: string_key("ninja"))
+    field(:rockstar, :integer, resolve: string_key("rockstar"))
   end
 
   # object :upgrade_map do
@@ -28,12 +30,16 @@ defmodule UnicornWeb.Schema.Types do
 
   @desc "Details of an item that can be purchased"
   object :purchase_item do
-    field(:type, :string)
-    field(:name, :string)
-    field(:cost, :integer)
-    field(:code_rate, :integer)
-    field(:revenue_rate, :integer)
-    field(:expense_rate, :integer)
+    field(:type, :string, resolve: string_key("type"))
+    field(:name, :string, resolve: string_key("name"))
+    field(:cost, :integer, resolve: string_key("cost"))
+    field(:code_rate, :integer, resolve: string_key("code_rate"))
+    field(:revenue_rate, :integer, resolve: string_key("revenue_rate"))
+    field(:expense_rate, :integer, resolve: string_key("expense_rate"))
+  end
+
+  def string_key(key) do
+    fn obj, _, _ -> {:ok, obj[key]} end
   end
 
   # lookup fields in :employee_map by string keys instead of atoms
@@ -42,6 +48,9 @@ defmodule UnicornWeb.Schema.Types do
     middleware_spec = {{__MODULE__, :get_string_key}, Atom.to_string(identifier)}
     Absinthe.Schema.replace_default(middleware, middleware_spec, field, object)
   end
+
+  # if it's any other object keep things as is
+  def middleware(middleware, _field, _object), do: middleware
 
   def get_string_key(%{source: source} = res, key) do
     %{res | state: :resolved, value: Map.get(source, key)}

@@ -45,7 +45,8 @@ defmodule Unicorn.Mixfile do
       {:cortex, "~> 0.1", only: [:dev, :test]},
       {:accessible, "~> 0.2.1"},
       {:absinthe, "~> 1.4"},
-      {:absinthe_plug, "~> 1.4"}
+      {:absinthe_plug, "~> 1.4"},
+      {:absinthe_phoenix, "~> 1.4"}
     ]
   end
 
