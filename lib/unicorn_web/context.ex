@@ -22,7 +22,6 @@ defmodule UnicornWeb.Context do
   def build_context(conn) do
     with [user_id] <- get_req_header(conn, "currentuserid"),
          {:ok, user} <- Users.get(user_id) do
-      IO.puts("current_user: #{inspect user}")
       %{current_user: user}
     else
       _ -> %{}

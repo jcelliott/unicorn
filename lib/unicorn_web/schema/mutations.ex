@@ -7,14 +7,34 @@ defmodule UnicornWeb.Schema.Mutations do
     field :name, non_null(:string)
   end
 
-  object :user_mutations do
-    field :purchase, type: :user do
-      arg :input, non_null(:purchase_input)
+  object :user_response do
+    field :user, :user
+  end
 
-      resolve fn %{input: input}, _context ->
-        user = Users.get_by_username!("fred")
-        Users.execute_action(user.id, {:purchase, input})
+  def wrap_user_response({:ok, user}), do: {:ok, %{user: user}}
+  def wrap_user_response(result), do: result
+
+  object :user_mutations do
+    @desc "Create a new user"
+    field :create_user, type: :user_response do
+      arg :username, non_null(:string)
+
+      resolve fn args, _context ->
+        Users.create_user(args)
+        |> wrap_user_response()
       end
     end
+
+    @desc "Make a purchase"
+    field :purchase, type: :user_response do
+      arg :purchase, non_null(:purchase_input)
+
+      resolve fn %{purchase: purchase}, %{context: %{current_user: user}} ->
+        Users.execute_action(user, {:purchase, purchase})
+        |> IO.inspect(label: "after purchase")
+        |> wrap_user_response()
+      end
+    end
+
   end
 end
