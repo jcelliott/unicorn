@@ -16,11 +16,20 @@ defmodule UnicornWeb.Router do
     get("/", PageController, :index)
   end
 
-  forward "/api", Absinthe.Plug,
-    schema: UnicornWeb.Schema
+  pipeline :api do
+    plug :accepts, ["json"]
+    plug UnicornWeb.Context
+  end
 
-  forward "/graphiql", Absinthe.Plug.GraphiQL,
-    schema: UnicornWeb.Schema,
-    interface: :playground
+  scope "/api" do
+    pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: UnicornWeb.Schema,
+      interface: :playground
+
+    forward "/", Absinthe.Plug,
+      schema: UnicornWeb.Schema
+  end
 
 end
